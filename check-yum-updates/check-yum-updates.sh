@@ -22,7 +22,7 @@ NOTRHEL=$?
 ### Check if Zabbix-Sender is Installed ###
 if [ $NOTRHEL -eq 0 ]
 then
-        if ! rpm -qa | grep -qw zabbix-sender; then
+  if ! rpm -qa | grep -qw zabbix-sender; then
     echo "zabbix-sender NOT installed"
     exit 1;
   fi
@@ -65,7 +65,9 @@ ENHANCEMENT=`grep "Enhancement notice" $summ | awk '{ print $1 }'`
 rm -f $summ
 
 ALL=`yum check-update -q | wc -l | awk '{ print $1 - 1 }'`
-
+if [ $ALL -le 0 ]; then
+    ALL=0
+fi
 
 #echo "Critical $CRITICAL foo"
 
