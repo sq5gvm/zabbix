@@ -3,7 +3,7 @@
 ### Make sure zabbix-sender package is installed ###
 
 ### Set Some Variables ###
-ZBX_DATA=/tmp/zabbix-sender-yum.data
+ZBX_DATA=/tmp/zabbix-sender-yum.data1
 HOSTNAME=$(egrep ^Hostname= /etc/zabbix/zabbix_agentd.conf | cut -d = -f 2)
 ZBX_SERVER_IP=$(egrep ^ServerActive /etc/zabbix/zabbix_agentd.conf | cut -d = -f 2)
 
@@ -22,11 +22,11 @@ NOTRHEL=$?
 ### Check if Zabbix-Sender is Installed ###
 if [ $NOTRHEL -eq 0 ]
 then
-	if ! rpm -qa | grep -qw zabbix-sender; then
+        if ! rpm -qa | grep -qw zabbix-sender; then
     echo "zabbix-sender NOT installed"
     exit 1;
   fi
-else 
+else
   if ! command -v zabbix_sender > /dev/null
   then
     echo "zabbix_sender NOT installed"
@@ -50,6 +50,7 @@ CRITICAL=0
 UNKNOWN=0
 BUGFIX=0
 ENHANCEMENT=0
+ALL=0
 
 summ=`mktemp`
 yum updateinfo summary > $summ
@@ -62,10 +63,11 @@ CRITICAL=`grep "Critical Security notice" $summ | awk '{ print $1 }'`
 BUGFIX=`grep "Bugfix notice" $summ | awk '{ print $1 }'`
 ENHANCEMENT=`grep "Enhancement notice" $summ | awk '{ print $1 }'`
 rm -f $summ
-  
+
+ALL=`yum check-update -q | wc -l | awk '{ print $1 - 1 }'`
 
 
-echo "Critical $CRITICAL foo"
+#echo "Critical $CRITICAL foo"
 
 ### Add data to file and send it to Zabbix Server ###
 echo -n > $ZBX_DATA
@@ -101,11 +103,16 @@ if [ "$CRITICAL" != "" ]
 then
   echo "$HOSTNAME yum.critical $CRITICAL" >> $ZBX_DATA
 fi
+if [ "$ALL" != "" ]
+then
+  echo "$HOSTNAME yum.all $ALL" >> $ZBX_DATA
+fi
 echo "$HOSTNAME yum.release $RELEASE" >> $ZBX_DATA
 echo "$HOSTNAME yum.selinux $SELINUX" >> $ZBX_DATA
 
 
 
 zabbix_sender -z $ZBX_SERVER_IP -i $ZBX_DATA &> /dev/null
+
 
 
