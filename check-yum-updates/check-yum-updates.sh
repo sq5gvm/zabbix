@@ -76,38 +76,56 @@ echo -n > $ZBX_DATA
 if [ "$SECURITY" != "" ]
 then
   echo "$HOSTNAME yum.security $SECURITY" >> $ZBX_DATA
+else
+  echo "$HOSTNAME yum.security 0" >> $ZBX_DATA
 fi
 if [ "$BUGFIX" != "" ]
 then
   echo "$HOSTNAME yum.bugfixes $BUGFIX" >> $ZBX_DATA
+else
+  echo "$HOSTNAME yum.bugfixes 0" >> $ZBX_DATA
 fi
 if [ "$UNKNOWN" != "" ]
 then
   echo "$HOSTNAME yum.unknown $UNKNOWN" >> $ZBX_DATA
+else
+  echo "$HOSTNAME yum.unknown 0" >> $ZBX_DATA
 fi
 if [ "$ENHANCEMENT" != "" ]
 then
   echo "$HOSTNAME yum.enhancement $ENHANCEMENT" >> $ZBX_DATA
+else
+  echo "$HOSTNAME yum.enhancement 0" >> $ZBX_DATA
 fi
 if [ "$MODERATE" != "" ]
 then
   echo "$HOSTNAME yum.moderate $MODERATE" >> $ZBX_DATA
+else
+  echo "$HOSTNAME yum.moderate 0" >> $ZBX_DATA
 fi
 if [ "$IMPORTANT" != "" ]
 then
   echo "$HOSTNAME yum.important $IMPORTANT" >> $ZBX_DATA
+else
+  echo "$HOSTNAME yum.important 0" >> $ZBX_DATA
 fi
 if [ "$LOW" != "" ]
 then
   echo "$HOSTNAME yum.low $LOW" >> $ZBX_DATA
+else
+  echo "$HOSTNAME yum.low 0" >> $ZBX_DATA
 fi
 if [ "$CRITICAL" != "" ]
 then
   echo "$HOSTNAME yum.critical $CRITICAL" >> $ZBX_DATA
+else
+  echo "$HOSTNAME yum.critical 0" >> $ZBX_DATA
 fi
 if [ "$ALL" != "" ]
 then
   echo "$HOSTNAME yum.all $ALL" >> $ZBX_DATA
+else
+  echo "$HOSTNAME yum.all 0" >> $ZBX_DATA
 fi
 echo "$HOSTNAME yum.release $RELEASE" >> $ZBX_DATA
 echo "$HOSTNAME yum.selinux $SELINUX" >> $ZBX_DATA
